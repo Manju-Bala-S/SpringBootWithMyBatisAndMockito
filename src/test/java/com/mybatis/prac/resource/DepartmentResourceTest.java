@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,7 +70,7 @@ class DepartmentResourceTest {
                         .content(jsonString))
                 .andExpect(status().isOk());
         ArgumentCaptor<Department> departmentArgumentCaptor = ArgumentCaptor.forClass(Department.class);
-        Mockito.verify(departmentService,Mockito.times(1)).insert(departmentArgumentCaptor.capture());
+        verify(departmentService, times(1)).insert(departmentArgumentCaptor.capture());
         validateRequestToEntity(department,departmentArgumentCaptor.getValue());
     }
 
@@ -83,14 +84,14 @@ class DepartmentResourceTest {
     @Test
     @DisplayName("Testing get dept. by Id operation")
     void getDeptById() throws Exception {
-        Mockito.when(departmentService.findDeptById(4)).thenReturn(department);
+        when(departmentService.findDeptById(4)).thenReturn(department);
         mockMvc.perform(get("/getById/4")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.department_name")
                         .value(department.getDepartment_name()));
         ArgumentCaptor<Integer> departmentIdArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
-        Mockito.verify(departmentService,Mockito.times(2)).findDeptById(departmentIdArgumentCaptor.capture());
+        verify(departmentService, times(2)).findDeptById(departmentIdArgumentCaptor.capture());
     }
 
     @Test
@@ -98,18 +99,18 @@ class DepartmentResourceTest {
     void getAll() throws Exception {
         List<Department> departmentList = new ArrayList<>();
         departmentList.add(department);
-        Mockito.when(departmentService.findAll()).thenReturn(departmentList);
+        when(departmentService.findAll()).thenReturn(departmentList);
         mockMvc.perform(get("/all")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].department_name").value(departmentList.get(0).getDepartment_name()));
-        Mockito.verify(departmentService,Mockito.times(1)).findAll();
+        verify(departmentService, times(1)).findAll();
     }
 
     @Test
     void update() throws Exception {
         department = new Department(4,"ECE","D04","ECE block");;
-        Mockito.when(departmentService.update(department)).thenReturn(department);
+        when(departmentService.update(department)).thenReturn(department);
         mockMvc.perform(put("/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
@@ -122,7 +123,7 @@ class DepartmentResourceTest {
                 .andExpect(jsonPath("$.department_address")
                         .value(department.getDepartment_address()));;
         ArgumentCaptor<Department> departmentArgumentCaptor = ArgumentCaptor.forClass(Department.class);
-        Mockito.verify(departmentService,Mockito.times(1)).update(departmentArgumentCaptor.capture());
+        verify(departmentService, times(1)).update(departmentArgumentCaptor.capture());
         validateRequestToEntity(department,departmentArgumentCaptor.getValue());
     }
 
