@@ -50,9 +50,9 @@ class DepartmentResource{
     }
 
     @PutMapping("/update")
-    public List<Department> update(@Valid @RequestBody Department department){
+    public Department update(@Valid @RequestBody Department department){
         departmentService.update(department);
-        return departmentService.findAll();
+        return department;
     }
 
     @DeleteMapping("/delete/{department_id}")

@@ -24,8 +24,9 @@ public class DepartmentServiceImpl implements DepartmentServiceInterface {
     }
 
     @Override
-    public void update(Department department) {
+    public Department update(Department department) {
         departmentMapper.update(department);
+        return department;
     }
 
     @Override
